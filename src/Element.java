@@ -42,6 +42,21 @@ public class Element {
         nextElement = new ArrayList<>();
     }
 
+    public Element(double delay, String distribution) {
+        name = "anonymus";
+        tnext = 0.0;
+        delayMean = delay;
+        delayDev =30;
+        this.distribution = distribution;
+        tcurr = tnext;
+        state = 0;
+        nextElement = null;
+        id = nextId;
+        nextId++;
+        name = "element" + id;
+        nextElement = new ArrayList<>();
+    }
+
     public Element(String nameOfElement, double delay) {
         name = nameOfElement;
         tnext = 0.0;

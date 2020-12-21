@@ -1,46 +1,57 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Model {
 
     private ArrayList<Element> list;
     private double tnext, tcurr;
-    private int event;
+    private List<Integer> event;
 
     public Model(ArrayList<Element> elements) {
         list = elements;
         tcurr = tnext = 0.0;
-        event = 0;
+        event = new ArrayList<>();
     }
 
     public void simulate(double time) {
         while (tcurr < time) {
             tnext = Double.MAX_VALUE;
+            // initialize tnext for every process
             for (Element e : list) {
                 if (e.getTnext() < tnext) {
                     tnext = e.getTnext();
-                    event = e.getId();
+                    event.add(e.getId());
                 }
             }
-            System.out.println("\nIt's time for event in " + list.get(event).getName() + ", time = " + tnext);
+            System.out.println("==================================================");
+            event.forEach(e ->System.out.println("\nIt's time for event in " + list.get(e).getName() + ", time = " + tnext));
 
-            for (Element e : list) {
-                if (e instanceof Process) {
-                    var p = (Process) e;
-                    p.addLoadSum(p.getState() * (tnext - tcurr));
-                }
-                e.doStatistics(tnext - tcurr);
-            }
+//            for (Element e : list) {
+//                if (e instanceof Process) {
+//                    var p = (Process) e;
+//                    p.addLoadSum(p.getState() * (tnext - tcurr));
+//                }
+//                e.doStatistics(tnext - tcurr);
+//            }
+
+            // просунуть время
             tcurr = tnext;
+
+            // обновить tcurr для всех процесов
             for (Element e : list) {
                 e.setTcurr(tcurr);
             }
-            list.get(event).outAct();
+            // завершение event-ов на даной итерации
+            event.forEach(e -> list.get(e).outAct());
+
+            // завершение если время завршение равно..
             for (Element e : list) {
                 if (e.getTnext() == tcurr) {
                     e.outAct();
                 }
             }
 //            printInfo();
+            event.clear();
         }
         printResult();
     }
