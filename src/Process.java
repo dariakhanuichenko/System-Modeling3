@@ -8,8 +8,8 @@ public class Process extends Element {
     private ProcessType type;
     private Element previousProcess;
 
-    public Process(double delay, String name, String distribution, ProcessType type, int id, Element previousProcess) {
-        super(delay,name, distribution, id);
+    public Process(double delay, String name, String distribution, ProcessType type, int id, Element previousProcess, int num) {
+        super(delay, name, distribution, id, num);
         queue = 0;
         maxqueue = Integer.MAX_VALUE;
         meanQueue = 0.0;
@@ -19,8 +19,8 @@ public class Process extends Element {
         this.previousProcess = previousProcess;
     }
 
-    public Process( String name,  ProcessType type, int id, Element previousProcess) {
-        super(name, id);
+    public Process(String name, ProcessType type, int id, Element previousProcess, int num) {
+        super(name, id, num);
         queue = 0;
         maxqueue = Integer.MAX_VALUE;
         meanQueue = 0.0;
@@ -48,9 +48,9 @@ public class Process extends Element {
         int min = Integer.MAX_VALUE;
         Element result = null;
         for (Element e : nextElement) {
-            if (e.getState() == 0 && Math.abs(e.getId() - this.getId()) < min) {
+            if (e.getState() == 0 && Math.abs(e.getNum() - this.getNum()) < min) {
                 result = e;
-                min = Math.abs(e.getId() - this.getId());
+                min = Math.abs(e.getNum() - this.getNum());
             }
         }
         return result;
@@ -61,7 +61,8 @@ public class Process extends Element {
 
         super.outAct();
         super.setTnext(Double.MAX_VALUE);
-        super.setState(0);                      //освободили устройство
+        if (getType().equals(ProcessType.MACHINE))
+            super.setState(0);                      //освободили устройство
         if (getQueue() > 0) {                   // если очередь не пустая
             setQueue(getQueue() - 1);           // взяли с очереди
             super.setState(1);                  // заняли устройство

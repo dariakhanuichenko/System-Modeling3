@@ -13,6 +13,7 @@ public class Element {
     private List<Element> nextElement;
     private static int nextId = 0;
     private int id;
+    private int num;
 
 
     public Element(double delay, String name) {
@@ -28,7 +29,7 @@ public class Element {
         nextElement = new ArrayList<>();
     }
 
- public Element( String name, int id) {
+ public Element( String name, int id, int num) {
         this.name = name;
         tnext = 0.0;
         delayMean = 0;
@@ -39,9 +40,10 @@ public class Element {
         this.id = id;
         nextId++;
         nextElement = new ArrayList<>();
+        this.num = num;
     }
 
-    public Element(double delay, String name, String distribution, int id) {
+    public Element(double delay, String name, String distribution, int id ,int num) {
         this.name = name;
         tnext = 0.0;
         delayMean = delay;
@@ -81,6 +83,14 @@ public class Element {
 
     public double getDelayDev() {
         return delayDev;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
     }
 
     public void setDelayDev(double delayDev) {

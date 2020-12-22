@@ -5,11 +5,11 @@ public class Create extends Element {
         super(delay, "CREATOR");
     }
 
-    Element getItemWithMinId(List<Element> nextElement) {
+    Element getItemWithMinNum(List<Element> nextElement) {
         int min = Integer.MAX_VALUE;
         Element result = null;
         for (Element e : nextElement) {
-            if (e.getState() == 0 && e.getId() < min) {
+            if (e.getState() == 0 && e.getNum() < min) {
                 result = e;
                 min = e.getId();
             }
@@ -22,7 +22,7 @@ public class Create extends Element {
         super.outAct();                                             // закончить обработку
         super.setTnext(super.getTcurr() + super.getDelay());
 
-        Element nextE = getItemWithMinId(super.getNextElement());
+        Element nextE = getItemWithMinNum(super.getNextElement());
 
         if (nextE != null) {   // если существует свободный след лемент
             ((Process) nextE).setPreviousProcess(this); // устанавливаем преведущий процесс

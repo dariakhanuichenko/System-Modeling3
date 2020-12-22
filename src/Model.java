@@ -49,7 +49,7 @@ public class Model {
 
             // завершение если время завршение равно..
             for (Element e : list) {
-                if (e.getTnext() == tcurr) {
+                if (e.getTnext() == tcurr && e.getState() != 0) {
                     e.outAct();
                 }
             }
@@ -64,14 +64,13 @@ public class Model {
             e.printResult();
             if (e instanceof Process) {
                 Process p = (Process) e;
-                System.out.println(
-                        "\navg load = " + p.getLoadSum() / p.getTcurr() +                            // средняя загрузка устройства
-                                "\nmax observed length of queue = " + p.getMaxObservedQueue());              // максимальная длина очереди
+
                 if (p.getType().equals(ProcessType.CART_TT2))
                     System.out.println("Прибуток = " + p.getQuantity() * 1500);   // прибыль
                 System.out.println("-------------------------------\n");
 
             }
         }
+        System.out.println("Загальний прибуток: " + list.stream().filter(e -> e instanceof Process && ((Process)e).getType().equals(ProcessType.CART_TT2)).mapToInt(e-> e.getQuantity()*1500).sum());
     }
 }

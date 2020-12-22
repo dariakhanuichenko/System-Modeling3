@@ -25,7 +25,6 @@ public class FunRand {
             a = Math.random();
         }
          a = Math.exp(-timeMean *a);
-        System.out.println("a=" + a);
         return a;
     }
     /**
