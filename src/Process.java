@@ -35,7 +35,7 @@ public class Process extends Element {
         if (super.getState() == 0) {                                    // если устройство свободное
             super.setState(1);                                          // занимаем
             if (type == ProcessType.CART_TT2 && this.getPreviousProcess() != null) // если это тележка типа тт2
-                super.setTnext((getPreviousProcess().getId() + 1) * 2 + super.getTcurr()); // устанавливаем время согласно формулы ( (номер устройства +1) * 2 + tcurr)
+                super.setTnext((getPreviousProcess().getId() + 1) * 2 + 10); // устанавливаем время согласно формулы ( (номер устройства +1) * 2 + tcurr)
             else
                 super.setTnext(super.getTcurr() + super.getDelay());        // в другом случае считаем  обычно
         } else {                                                        // если устройство занято
@@ -72,7 +72,7 @@ public class Process extends Element {
 
         if (nextE != null) {                                            //если такой существует
             if (getType().equals(ProcessType.CART_TT1)) {               // и сейчас мы на тележке типа ТТ1
-                super.setTnext(nextE.getId() + 1 + super.getTcurr());   // считаем по специальной формуле время
+                super.setTnext(nextE.getId() + 1 + 10);   // считаем по специальной формуле время
             }
             if (nextE instanceof Process)
                 if (((Process) nextE).getType().equals(ProcessType.CART_TT2))
