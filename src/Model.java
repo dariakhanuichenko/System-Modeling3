@@ -25,7 +25,7 @@ public class Model {
             }
             System.out.println("==================================================");
             event.forEach(e ->System.out.println("\nIt's time for event in " + list.get(e).getName() + ", time = " + tnext));
-
+            System.out.println("--------------------------------------------------");
 //            for (Element e : list) {
 //                if (e instanceof Process) {
 //                    var p = (Process) e;

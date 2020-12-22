@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Process extends Element {
     private int queue, maxqueue, failure;
     private double meanQueue;
@@ -15,17 +17,19 @@ public class Process extends Element {
         maxObservedQueue = 0;
         this.type = type;
     }
+
     @Override
     public void inAct() {
         if (super.getState() == 0) {                                    // если устройство свободное
             super.setState(1);                                          // занимаем
-//            if(type == ProcessType.CART_TT1)
-
-            super.setTnext(super.getTcurr() + super.getDelay());        // генерируем время
+            if (type == ProcessType.CART_TT2 && this.getPreviousProcess() != null)
+                super.setTnext((getPreviousProcess().getId() + 1) * 2 + super.getTcurr());
+            else
+                super.setTnext(super.getTcurr() + super.getDelay());        // генерируем время
         } else {                                                        // если устройство занято
 //            if (getQueue() < getMaxqueue()) {
-                setQueue(getQueue() + 1);
-                System.out.println("Q=" + getQueue());
+            setQueue(getQueue() + 1);
+            System.out.println("Q=" + getQueue());
 //                if (queue > maxObservedQueue)
 //                    maxObservedQueue = queue;
 //            } else {
@@ -34,6 +38,19 @@ public class Process extends Element {
 //            }
         }
     }
+
+    Element getItemWithMinDifference(List<Element> nextElement) {
+        int min = Integer.MAX_VALUE;
+        Element result = null;
+        for (Element e : nextElement) {
+            if (e.getState() == 0 && Math.abs(e.getId() - this.getId()) < min) {
+                result = e;
+                min = Math.abs(e.getId() - this.getId());
+            }
+        }
+        return result;
+    }
+
     @Override
     public void outAct() {
 
@@ -44,6 +61,18 @@ public class Process extends Element {
             setQueue(getQueue() - 1);
             super.setState(1);
             super.setTnext(super.getTcurr() + super.getDelay());
+        }
+
+        Element nextE = getItemWithMinDifference(super.getNextElement());
+
+        if (nextE != null) {   //
+            if (getType().equals(ProcessType.CART_TT1)) {
+                super.setTnext(nextE.getId() + 1 + super.getTcurr());
+            }
+            if (nextE instanceof Process)
+                if (((Process) nextE).getType().equals(ProcessType.MACHINE))
+                    ((Process) nextE).setPreviousProcess(this);
+            nextE.inAct();                //
         }
     }
 
@@ -71,6 +100,7 @@ public class Process extends Element {
     public int getFailure() {
         return failure;
     }
+
     public int getQueue() {
         return queue;
     }
@@ -113,6 +143,7 @@ public class Process extends Element {
     public void doStatistics(double delta) {
         meanQueue = getMeanQueue() + queue * delta;
     }
+
     public double getMeanQueue() {
         return meanQueue;
     }

@@ -25,6 +25,7 @@ public class Create extends Element {
         Element nextE = getItemWithMinId(super.getNextElement());
 
         if (nextE != null) {   // если выбронае к-во обработаных заявок соответствует даномы элементу
+            ((Process)nextE).setPreviousProcess(this);
             nextE.inAct();                // запускаем в работу
         }
     }
