@@ -16,16 +16,19 @@ public class Model {
     public void simulate(double time) {
         while (tcurr < time) {
             tnext = Double.MAX_VALUE;
-            // initialize tnext for every process
+
+            // установить tnext для каждого елемента схемы
             for (Element e : list) {
                 if (e.getTnext() < tnext) {
                     tnext = e.getTnext();
                     event.add(e.getId());
                 }
             }
+
             System.out.println("==================================================");
-            event.forEach(e ->System.out.println("\nIt's time for event in " + list.get(e).getName() + ", time = " + tnext));
+            event.forEach(e -> System.out.println("\nIt's time for event in " + list.get(e).getName() + ", time = " + tnext));
             System.out.println("--------------------------------------------------");
+
 //            for (Element e : list) {
 //                if (e instanceof Process) {
 //                    var p = (Process) e;
@@ -50,28 +53,22 @@ public class Model {
                     e.outAct();
                 }
             }
-//            printInfo();
             event.clear();
         }
         printResult();
     }
 
-    public void printInfo() {
-        for (Element e : list) {
-            e.printInfo();
-        }
-    }
-
     public void printResult() {
-        System.out.println("\n-------------RESULTS-------------");
+        System.out.println("\n-------------РЕЗУЛЬТАТИ-------------");
         for (Element e : list) {
             e.printResult();
             if (e instanceof Process) {
                 Process p = (Process) e;
-                System.out.println("mean length of queue = " + p.getMeanQueue() / tcurr +                       //средняя длина очереди
-                        "\nfailure probability = " + p.getFailure() / (double) p.getQuantity() +     // вероятность отказа
+                System.out.println(
                         "\navg load = " + p.getLoadSum() / p.getTcurr() +                            // средняя загрузка устройства
-                        "\nmax observed length of queue = " + p.getMaxObservedQueue());              // максимальная длина очереди
+                                "\nmax observed length of queue = " + p.getMaxObservedQueue());              // максимальная длина очереди
+                if (p.getType().equals(ProcessType.CART_TT2))
+                    System.out.println("Прибуток = " + p.getQuantity() * 1500);   // прибыль
                 System.out.println("-------------------------------\n");
 
             }

@@ -18,6 +18,16 @@ public class FunRand {
         a = -timeMean * Math.log(a);
         return a;
     }
+
+    public static double Puasson(double timeMean) {
+        double a = 0;
+        while (a == 0) {
+            a = Math.random();
+        }
+         a = Math.exp(-timeMean *a);
+        System.out.println("a=" + a);
+        return a;
+    }
     /**
      * Generates a random value according to a uniform
      distribution

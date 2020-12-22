@@ -14,22 +14,9 @@ public class Element {
     private static int nextId = 0;
     private int id;
 
-    public Element() {
-        tnext = 0.0;
-        delayMean = 1.0;
-        distribution = "exp";
-        tcurr = tnext;
-        state = 0;
-        nextElement = null;
-        id = nextId;
-        nextId++;
-        name = "element" + id;
-        nextElement = new ArrayList<>();
 
-    }
-
-    public Element(double delay) {
-        name = "anonymus";
+    public Element(double delay, String name) {
+        this.name = name;
         tnext = 0.0;
         delayMean = delay;
         distribution = "exp";
@@ -38,39 +25,37 @@ public class Element {
         nextElement = null;
         id = nextId;
         nextId++;
-        name = "element" + id;
         nextElement = new ArrayList<>();
     }
 
-    public Element(double delay, String distribution) {
-        name = "anonymus";
+ public Element( String name, int id) {
+        this.name = name;
+        tnext = 0.0;
+        delayMean = 0;
+        distribution = "exp";
+        tcurr = tnext;
+        state = 0;
+        nextElement = null;
+        this.id = id;
+        nextId++;
+        nextElement = new ArrayList<>();
+    }
+
+    public Element(double delay, String name, String distribution, int id) {
+        this.name = name;
         tnext = 0.0;
         delayMean = delay;
-        delayDev =30;
+        delayDev = 30;
         this.distribution = distribution;
         tcurr = tnext;
         state = 0;
         nextElement = null;
-        id = nextId;
+        this.id = id;
         nextId++;
-        name = "element" + id;
         nextElement = new ArrayList<>();
     }
 
-    public Element(String nameOfElement, double delay) {
-        name = nameOfElement;
-        tnext = 0.0;
-        delayMean = delay;
-        distribution = "exp";
-        tcurr = tnext;
-        state = 0;
-        nextElement = null;
-        id = nextId;
-        nextId++;
-        name = "element" + id;
-        nextElement = new ArrayList<>();
-    }
-
+ // TODO: переписать на enum
     public double getDelay() {
         double delay = getDelayMean();
         if ("exp".equalsIgnoreCase(getDistribution())) {
@@ -79,11 +64,15 @@ public class Element {
             if ("norm".equalsIgnoreCase(getDistribution())) {
                 delay = FunRand.Norm(getDelayMean(), getDelayDev());
             } else {
-                if ("unif".equalsIgnoreCase(getDistribution())) {
-                    delay = FunRand.Unif(getDelayMean(), getDelayDev());
+                if ("puasson".equalsIgnoreCase(getDistribution())) {
+                    delay = FunRand.Puasson(getDelayMean());
                 } else {
-                    if ("".equalsIgnoreCase(getDistribution()))
-                        delay = getDelayMean();
+                    if ("unif".equalsIgnoreCase(getDistribution())) {
+                        delay = FunRand.Unif(getDelayMean(), getDelayDev());
+                    } else {
+                        if ("".equalsIgnoreCase(getDistribution()))
+                            delay = getDelayMean();
+                    }
                 }
             }
         }
@@ -130,7 +119,7 @@ public class Element {
         return nextElement;
     }
 
-    public void setNextElement(Element nextElement) {
+    public void addNextElement(Element nextElement) {
         if (nextElement != null)
             this.nextElement.add(nextElement);
     }
