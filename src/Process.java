@@ -35,7 +35,7 @@ public class Process extends Element {
         if (super.getState() == 0) {                                    // если устройство свободное
             super.setState(1);                                          // занимаем
             if (type == ProcessType.CART_TT2 && this.getPreviousProcess() != null) // если это тележка типа тт2
-                super.setTnext((getPreviousProcess().getNum() + 1) * 2 + 10); // устанавливаем время согласно формулы ( (номер устройства +1) * 2 + tcurr)
+                super.setTnext((getPreviousProcess().getNum() + 1) * 2 + 10 + getTcurr()); // устанавливаем время согласно формулы ( (номер устройства +1) * 2 + tcurr)
             else
                 super.setTnext(super.getTcurr() + super.getDelay());        // в другом случае считаем  обычно
         } else {                                                        // если устройство занято
@@ -73,12 +73,16 @@ public class Process extends Element {
 
         if (nextE != null) {                                            //если такой существует
             if (getType().equals(ProcessType.CART_TT1)) {               // и сейчас мы на тележке типа ТТ1
-                super.setTnext(nextE.getNum() + 1 + 10);   // считаем по специальной формуле время
+                super.setTnext(nextE.getNum() + 1 + 10 + getTcurr());   // считаем по специальной формуле время
             }
             if (nextE instanceof Process)
                 if (((Process) nextE).getType().equals(ProcessType.CART_TT2))
                     ((Process) nextE).setPreviousProcess(this);
-            nextE.inAct();                //
+            System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\");
+            System.out.println("\nIt's time for event in " + nextE.getName() + ", time = " + super.getTnext());
+            System.out.println("--------------------------------------------------");
+//            nextE.inAct();                //
+            ((Process)nextE).queue++;
         }
     }
 
@@ -109,6 +113,10 @@ public class Process extends Element {
 
     public void setQueue(int queue) {
         this.queue = queue;
+    }
+
+    public void addOneToQueue() {
+        this.queue++;
     }
 
     public int getMaxqueue() {
