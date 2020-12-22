@@ -25,7 +25,6 @@ public class Create extends Element {
         Element nextE = getItemWithMinNum(super.getNextElement());
 
         if (nextE != null) {   // если существует свободный след лемент
-            ((Process) nextE).setPreviousProcess(this); // устанавливаем преведущий процесс
             nextE.inAct();                // запускаем в работу
         }
     }

@@ -34,9 +34,18 @@ public class Process extends Element {
     public void inAct() {
         if (super.getState() == 0) {                                    // если устройство свободное
             super.setState(1);                                          // занимаем
+
+            Element nextE = getItemWithMinDifference(super.getNextElement()); // нашли след элемент с минимальной разницей id
+
             if (type == ProcessType.CART_TT2 && this.getPreviousProcess() != null) // если это тележка типа тт2
                 super.setTnext((getPreviousProcess().getNum() + 1) * 2 + 10 + getTcurr()); // устанавливаем время согласно формулы ( (номер устройства +1) * 2 + tcurr)
-            else
+            else if (type == ProcessType.CART_TT1){
+                if (nextE instanceof Process)
+                    if (((Process) nextE).getType().equals(ProcessType.CART_TT2))
+                        ((Process) nextE).setPreviousProcess(this);
+                ((Process) nextE).queue++;
+                nextE.setState(0);
+            } else
                 super.setTnext(super.getTcurr() + super.getDelay());        // в другом случае считаем  обычно
         } else {                                                        // если устройство занято
             setQueue(getQueue() + 1);
@@ -61,8 +70,7 @@ public class Process extends Element {
 
         super.outAct();
         super.setTnext(Double.MAX_VALUE);
-        if (getType().equals(ProcessType.MACHINE))
-            super.setState(0);                      //освободили устройство
+        super.setState(0);                      //освободили устройство
         if (getQueue() > 0) {                   // если очередь не пустая
             setQueue(getQueue() - 1);           // взяли с очереди
             super.setState(1);                  // заняли устройство
@@ -78,11 +86,8 @@ public class Process extends Element {
             if (nextE instanceof Process)
                 if (((Process) nextE).getType().equals(ProcessType.CART_TT2))
                     ((Process) nextE).setPreviousProcess(this);
-            System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\");
-            System.out.println("\nIt's time for event in " + nextE.getName() + ", time = " + super.getTnext());
-            System.out.println("--------------------------------------------------");
-//            nextE.inAct();                //
-            ((Process)nextE).queue++;
+            ((Process) nextE).queue++;
+            nextE.setState(0);
         }
     }
 
