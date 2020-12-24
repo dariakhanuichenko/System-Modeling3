@@ -8,7 +8,7 @@ public class Process extends Element {
     private ProcessType type;
     private Element previousProcess;
 
-    public Process(double delay, String name, String distribution, ProcessType type, int id, Element previousProcess, int num) {
+    public Process(double delay, String name, Distribution distribution, ProcessType type, int id, Element previousProcess, int num) {
         super(delay, name, distribution, id, num);
         queue = 0;
         maxqueue = Integer.MAX_VALUE;
@@ -45,7 +45,6 @@ public class Process extends Element {
                         ((Process) nextE).setPreviousProcess(this);
                 ((Process) nextE).queue++;
                 super.setTnext(getPreviousProcess().getNum() + 1 + 10 + getTcurr()); // устанавливаем время согласно формулы ( (номер устройства +1)+10 + tcurr)
-
                 nextE.setState(0);
             } else
                 super.setTnext(super.getTcurr() + super.getDelay());        // в другом случае считаем  обычно
@@ -64,7 +63,7 @@ public class Process extends Element {
                 min = Math.abs(e.getNum() - this.getNum());
             }
         }
-
+        min = Integer.MAX_VALUE;
         if(result == null) {
             for (Element e : nextElement) {
                 if ( Math.abs(e.getNum() - this.getNum()) < min) {

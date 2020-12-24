@@ -6,7 +6,7 @@ public class Element {
     private double tnext;
     private double delayMean, delayDev;
 
-    private String distribution;
+    private Distribution distribution;
     private int quantity;
     private double tcurr;
     private int state;
@@ -20,8 +20,8 @@ public class Element {
         this.name = name;
         tnext = 0.0;
         delayMean = delay;
-        distribution = "exp";
-        tcurr = tnext ;
+        distribution = Distribution.EXP;
+        tcurr = tnext;
         state = 0;
         nextElement = null;
         id = nextId;
@@ -29,11 +29,11 @@ public class Element {
         nextElement = new ArrayList<>();
     }
 
- public Element( String name, int id, int num) {
+    public Element(String name, int id, int num) {
         this.name = name;
         tnext = Double.MAX_VALUE;
         delayMean = 0;
-        distribution = "exp";
+        distribution = Distribution.EXP;
         tcurr = 0.0;
         state = 0;
         nextElement = null;
@@ -43,7 +43,7 @@ public class Element {
         this.num = num;
     }
 
-    public Element(double delay, String name, String distribution, int id ,int num) {
+    public Element(double delay, String name, Distribution distribution, int id, int num) {
         this.name = name;
         tnext = Double.MAX_VALUE;
         delayMean = delay;
@@ -57,24 +57,16 @@ public class Element {
         nextElement = new ArrayList<>();
     }
 
- // TODO: переписать на enum
     public double getDelay() {
         double delay = getDelayMean();
-        if ("exp".equalsIgnoreCase(getDistribution())) {
+        if (getDistribution().equals(Distribution.EXP)) {
             delay = FunRand.Exp(getDelayMean());
         } else {
-            if ("norm".equalsIgnoreCase(getDistribution())) {
+            if (getDistribution().equals(Distribution.NORM)) {
                 delay = FunRand.Norm(getDelayMean(), getDelayDev());
             } else {
-                if ("puasson".equalsIgnoreCase(getDistribution())) {
+                if (getDistribution().equals(Distribution.PUASSON)) {
                     delay = FunRand.Puasson(getDelayMean());
-                } else {
-                    if ("unif".equalsIgnoreCase(getDistribution())) {
-                        delay = FunRand.Unif(getDelayMean(), getDelayDev());
-                    } else {
-                        if ("".equalsIgnoreCase(getDistribution()))
-                            delay = getDelayMean();
-                    }
                 }
             }
         }
@@ -97,11 +89,11 @@ public class Element {
         this.delayDev = delayDev;
     }
 
-    public String getDistribution() {
+    public Distribution getDistribution() {
         return distribution;
     }
 
-    public void setDistribution(String distribution) {
+    public void setDistribution(Distribution distribution) {
         this.distribution = distribution;
     }
 

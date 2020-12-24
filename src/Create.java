@@ -14,6 +14,9 @@ public class Create extends Element {
                 min = e.getId();
             }
         }
+
+        min = Integer.MAX_VALUE;
+
         if (result == null){
             for (Element e : nextElement) {
                 if ( e.getNum() < min) {

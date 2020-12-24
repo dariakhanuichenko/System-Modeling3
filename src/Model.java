@@ -43,10 +43,10 @@ public class Model {
                 }
             }
         }
-        printResult();
+        printResult(time);
     }
 
-    public void printResult() {
+    public void printResult(Double time) {
         System.out.println("\n-------------РЕЗУЛЬТАТИ-------------");
         for (Element e : list) {
             e.printResult();
@@ -60,5 +60,10 @@ public class Model {
             }
         }
         System.out.println("Загальний прибуток: " + list.stream().filter(e -> e instanceof Process && ((Process) e).getType().equals(ProcessType.CART_TT2)).mapToInt(e -> e.getQuantity() * 1500).sum());
+
+        System.out.println("Чистий прибуток: " +
+                (list.stream().filter(e -> e instanceof Process && ((Process) e).getType().equals(ProcessType.CART_TT2)).mapToInt(e -> e.getQuantity() * 1500).sum() - // чистий прибуток
+                list.stream().filter(e -> e instanceof Process &&(((Process) e).getType().equals(ProcessType.CART_TT2) || ((Process) e).getType().equals(ProcessType.CART_TT1)) ).count() * // кількість візків
+                        time*2)); // помножети на час та на витрати за од. часу
     }
 }

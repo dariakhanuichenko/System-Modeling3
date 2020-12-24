@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         Create c = new Create(1.0/22);
-        c.setDistribution("puasson");
+        c.setDistribution(Distribution.PUASSON);
 
         Process t1Cart1 = new Process("Візок TT1 1", ProcessType.CART_TT1,1, c, 1);
         t1Cart1.setMaxqueue(Integer.MAX_VALUE);
@@ -13,53 +13,53 @@ public class Main {
         t1Cart2.setMaxqueue(Integer.MAX_VALUE);
         c.addNextElement(t1Cart2);
 
-        Process machine1 = new Process(200,"Верстат 1","norm", ProcessType.MACHINE,3, t1Cart1, 1);
+        Process machine1 = new Process(200,"Верстат 1",Distribution.NORM,  ProcessType.MACHINE,3, t1Cart1, 1);
         machine1.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine1);
         t1Cart2.addNextElement(machine1);
 
-        Process machine2 = new Process(200, "Верстат 2","norm", ProcessType.MACHINE,4, t1Cart1, 2);
+        Process machine2 = new Process(200, "Верстат 2",Distribution.NORM, ProcessType.MACHINE,4, t1Cart1, 2);
         machine2.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine2);
         t1Cart2.addNextElement(machine2);
 
 
-        Process machine3 = new Process(200, "Верстат 3","norm", ProcessType.MACHINE,5, t1Cart1, 3);
+        Process machine3 = new Process(200, "Верстат 3",Distribution.NORM,  ProcessType.MACHINE,5, t1Cart1, 3);
         machine3.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine3);
         t1Cart2.addNextElement(machine3);
 
-        Process machine4 = new Process(200, "Верстат 4","norm", ProcessType.MACHINE,6, t1Cart1, 4);
+        Process machine4 = new Process(200, "Верстат 4",Distribution.NORM,  ProcessType.MACHINE,6, t1Cart1, 4);
         machine4.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine4);
         t1Cart2.addNextElement(machine4);
 
-        Process machine5 = new Process(200, "Верстат 5","norm", ProcessType.MACHINE,7, t1Cart1, 5);
+        Process machine5 = new Process(200, "Верстат 5",Distribution.NORM,  ProcessType.MACHINE,7, t1Cart1, 5);
         machine5.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine5);
         t1Cart2.addNextElement(machine5);
 
-        Process machine6 = new Process(200, "Верстат 6","norm", ProcessType.MACHINE,8, t1Cart2, 6);
+        Process machine6 = new Process(200, "Верстат 6",Distribution.NORM,  ProcessType.MACHINE,8, t1Cart2, 6);
         machine6.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine6);
         t1Cart2.addNextElement(machine6);
 
-        Process machine7 = new Process(200, "Верстат 7","norm", ProcessType.MACHINE,9, t1Cart2, 7);
+        Process machine7 = new Process(200, "Верстат 7",Distribution.NORM,  ProcessType.MACHINE,9, t1Cart2, 7);
         machine7.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine7);
         t1Cart2.addNextElement(machine7);
 
-        Process machine8 = new Process(200, "Верстат 8","norm", ProcessType.MACHINE,10, t1Cart2, 8);
+        Process machine8 = new Process(200, "Верстат 8",Distribution.NORM,  ProcessType.MACHINE,10, t1Cart2, 8);
         machine8.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine8);
         t1Cart2.addNextElement(machine8);
 
-        Process machine9 = new Process(200, "Верстат 9","norm", ProcessType.MACHINE,11, t1Cart2, 9);
+        Process machine9 = new Process(200, "Верстат 9",Distribution.NORM,  ProcessType.MACHINE,11, t1Cart2, 9);
         machine9.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine9);
         t1Cart2.addNextElement(machine9);
 
-        Process machine10 = new Process(200, "Верстат 10","norm", ProcessType.MACHINE,12, t1Cart2, 10);
+        Process machine10 = new Process(200, "Верстат 10",Distribution.NORM,  ProcessType.MACHINE,12, t1Cart2, 10);
         machine10.setMaxqueue(Integer.MAX_VALUE);
         t1Cart1.addNextElement(machine10);
         t1Cart2.addNextElement(machine10);
@@ -108,6 +108,6 @@ public class Main {
         list.add(t2Cart2);
 
         Model model = new Model(list);
-        model.simulate(10000.0);
+        model.simulate(1000.0);
     }
 }
