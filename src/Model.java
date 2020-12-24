@@ -23,7 +23,7 @@ public class Model {
                 }
             }
 
-            System.out.println("==================================================");
+//            System.out.println("==================================================");
             System.out.println("\nIt's time for event in " + list.get(event).getName() + ", time = " + tnext);
             System.out.println("--------------------------------------------------");
 
@@ -38,7 +38,7 @@ public class Model {
             list.get(event).outAct();
             // завершение если время завршение равно..
             for (Element e : list) {
-                if (e.getTnext() == tcurr && e.getState() != 0) {
+                if (e.getTnext() <= tcurr && e.getState() != 0) {
                     e.outAct();
                 }
             }
@@ -55,7 +55,7 @@ public class Model {
 
                 if (p.getType().equals(ProcessType.CART_TT2))
                     System.out.println("Прибуток = " + p.getQuantity() * 1500);   // прибыль
-                System.out.println("-------------------------------\n");
+                System.out.println("-------------------------------");
 
             }
         }
