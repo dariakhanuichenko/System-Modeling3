@@ -21,7 +21,7 @@ public class Element {
         tnext = 0.0;
         delayMean = delay;
         distribution = "exp";
-        tcurr = tnext;
+        tcurr = tnext ;
         state = 0;
         nextElement = null;
         id = nextId;
@@ -31,10 +31,10 @@ public class Element {
 
  public Element( String name, int id, int num) {
         this.name = name;
-        tnext = 0.0;
+        tnext = Double.MAX_VALUE;
         delayMean = 0;
         distribution = "exp";
-        tcurr = tnext;
+        tcurr = 0.0;
         state = 0;
         nextElement = null;
         this.id = id;
@@ -45,11 +45,11 @@ public class Element {
 
     public Element(double delay, String name, String distribution, int id ,int num) {
         this.name = name;
-        tnext = 0.0;
+        tnext = Double.MAX_VALUE;
         delayMean = delay;
         delayDev = 30;
         this.distribution = distribution;
-        tcurr = tnext;
+        tcurr = 0.0;
         state = 0;
         nextElement = null;
         this.id = id;

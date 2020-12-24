@@ -44,6 +44,8 @@ public class Process extends Element {
                     if (((Process) nextE).getType().equals(ProcessType.CART_TT2))
                         ((Process) nextE).setPreviousProcess(this);
                 ((Process) nextE).queue++;
+                super.setTnext(getPreviousProcess().getNum() + 1 + 10 + getTcurr()); // устанавливаем время согласно формулы ( (номер устройства +1)+10 + tcurr)
+
                 nextE.setState(0);
             } else
                 super.setTnext(super.getTcurr() + super.getDelay());        // в другом случае считаем  обычно
@@ -60,6 +62,15 @@ public class Process extends Element {
             if (e.getState() == 0 && Math.abs(e.getNum() - this.getNum()) < min) {
                 result = e;
                 min = Math.abs(e.getNum() - this.getNum());
+            }
+        }
+
+        if(result == null) {
+            for (Element e : nextElement) {
+                if ( Math.abs(e.getNum() - this.getNum()) < min) {
+                    result = e;
+                    min = Math.abs(e.getNum() - this.getNum());
+                }
             }
         }
         return result;
@@ -86,8 +97,11 @@ public class Process extends Element {
             if (nextE instanceof Process)
                 if (((Process) nextE).getType().equals(ProcessType.CART_TT2))
                     ((Process) nextE).setPreviousProcess(this);
-            ((Process) nextE).queue++;
-            nextE.setState(0);
+//            ((Process) nextE).queue++;
+//            nextE.setState(0);
+            if (nextE != null) {   // если существует свободный след лемент
+                nextE.inAct();                // запускаем в работу
+            }
         }
     }
 

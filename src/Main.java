@@ -108,6 +108,6 @@ public class Main {
         list.add(t2Cart2);
 
         Model model = new Model(list);
-        model.simulate(1000.0);
+        model.simulate(10000.0);
     }
 }

@@ -14,6 +14,14 @@ public class Create extends Element {
                 min = e.getId();
             }
         }
+        if (result == null){
+            for (Element e : nextElement) {
+                if ( e.getNum() < min) {
+                    result = e;
+                    min = e.getId();
+                }
+            }
+        }
         return result;
     }
 
