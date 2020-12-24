@@ -11,7 +11,7 @@ public class Create extends Element {
         for (Element e : nextElement) {
             if (e.getState() == 0 && e.getNum() < min) {
                 result = e;
-                min = e.getId();
+                min = e.getNum();
             }
         }
 
@@ -19,10 +19,13 @@ public class Create extends Element {
 
         if (result == null){
             for (Element e : nextElement) {
-                if ( e.getNum() < min) {
+                if( e instanceof Process)
+                if ( ((Process)e).getQueue() < min) {
                     result = e;
-                    min = e.getId();
+                    min = ((Process)e).getQueue();
                 }
+                if(min == 0)
+                    break ;
             }
         }
         return result;
