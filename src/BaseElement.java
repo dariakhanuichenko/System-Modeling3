@@ -1,59 +1,55 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Element {
+public class BaseElement {
     private String name;
-    private double tnext;
+    private double tNext;
     private double delayMean, delayDev;
 
     private Distribution distribution;
     private int quantity;
-    private double tcurr;
+    private double tCurr;
     private int state;
-    private List<Element> nextElement;
-    private static int nextId = 0;
+    private List<BaseElement> nextElement;
     private int id;
     private int num;
 
 
-    public Element(double delay, String name) {
+    public BaseElement(double delay, String name) {
         this.name = name;
-        tnext = 0.0;
+        tNext = 0.0;
         delayMean = delay;
         distribution = Distribution.EXP;
-        tcurr = tnext;
+        tCurr = tNext;
         state = 0;
         nextElement = null;
-        id = nextId;
-        nextId++;
+        id = 0;
         nextElement = new ArrayList<>();
     }
 
-    public Element(String name, int id, int num) {
+    public BaseElement(String name, int id, int num) {
         this.name = name;
-        tnext = Double.MAX_VALUE;
+        tNext = Double.MAX_VALUE;
         delayMean = 0;
         distribution = Distribution.EXP;
-        tcurr = 0.0;
+        tCurr = 0.0;
         state = 0;
         nextElement = null;
         this.id = id;
-        nextId++;
         nextElement = new ArrayList<>();
         this.num = num;
     }
 
-    public Element(double delay, String name, Distribution distribution, int id, int num) {
+    public BaseElement(double delay, String name, Distribution distribution, int id, int num) {
         this.name = name;
-        tnext = Double.MAX_VALUE;
+        tNext = Double.MAX_VALUE;
         delayMean = delay;
         delayDev = 30;
         this.distribution = distribution;
-        tcurr = 0.0;
+        tCurr = 0.0;
         state = 0;
         nextElement = null;
         this.id = id;
-        nextId++;
         nextElement = new ArrayList<>();
     }
 
@@ -101,12 +97,12 @@ public class Element {
         return quantity;
     }
 
-    public double getTcurr() {
-        return tcurr;
+    public double gettCurr() {
+        return tCurr;
     }
 
-    public void setTcurr(double tcurr) {
-        this.tcurr = tcurr;
+    public void settCurr(double tCurr) {
+        this.tCurr = tCurr;
     }
 
     public int getState() {
@@ -117,11 +113,11 @@ public class Element {
         this.state = state;
     }
 
-    public List<Element> getNextElement() {
+    public List<BaseElement> getNextElement() {
         return nextElement;
     }
 
-    public void addNextElement(Element nextElement) {
+    public void addNextElement(BaseElement nextElement) {
         if (nextElement != null)
             this.nextElement.add(nextElement);
     }
@@ -133,12 +129,12 @@ public class Element {
         quantity++;
     }
 
-    public double getTnext() {
-        return tnext;
+    public double gettNext() {
+        return tNext;
     }
 
-    public void setTnext(double tnext) {
-        this.tnext = tnext;
+    public void settNext(double tNext) {
+        this.tNext = tNext;
     }
 
     public double getDelayMean() {
@@ -158,11 +154,11 @@ public class Element {
     }
 
     public void printResult() {
-        System.out.println(getName() + " quantity = " + quantity);
+        System.out.print(getName() +" - " + quantity +";  ");
     }
 
     public void printInfo() {
-        System.out.println(getName() + " state= " + state + " quantity = " + quantity + " tnext= " + tnext);
+        System.out.println(getName() + " state= " + state + " quantity = " + quantity + " tnext= " + tNext);
     }
 
     public String getName() {
@@ -175,4 +171,6 @@ public class Element {
 
     public void doStatistics(double delta) {
     }
+
+
 }

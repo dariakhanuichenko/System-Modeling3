@@ -1,17 +1,17 @@
 import java.util.List;
 
-public class Process extends Element {
-    private int queue, maxqueue;
+public class Processor extends BaseElement {
+    private int queue, maxQueue;
     private double meanQueue;
     private double loadSum;
     private int maxObservedQueue;
     private ProcessType type;
-    private Element previousProcess;
+    private BaseElement previousProcess;
 
-    public Process(double delay, String name, Distribution distribution, ProcessType type, int id, Element previousProcess, int num) {
+    public Processor(double delay, String name, Distribution distribution, ProcessType type, int id, BaseElement previousProcess, int num) {
         super(delay, name, distribution, id, num);
         queue = 0;
-        maxqueue = Integer.MAX_VALUE;
+        maxQueue = Integer.MAX_VALUE;
         meanQueue = 0.0;
         loadSum = 0.0;
         maxObservedQueue = 0;
@@ -19,10 +19,10 @@ public class Process extends Element {
         this.previousProcess = previousProcess;
     }
 
-    public Process(String name, ProcessType type, int id, Element previousProcess, int num) {
+    public Processor(String name, ProcessType type, int id, BaseElement previousProcess, int num) {
         super(name, id, num);
         queue = 0;
-        maxqueue = Integer.MAX_VALUE;
+        maxQueue = Integer.MAX_VALUE;
         meanQueue = 0.0;
         loadSum = 0.0;
         maxObservedQueue = 0;
@@ -35,29 +35,29 @@ public class Process extends Element {
         if (super.getState() == 0) {                                    // если устройство свободное
             super.setState(1);                                          // занимаем
 
-            Element nextE = getItemWithMinDifference(super.getNextElement()); // нашли след элемент с минимальной разницей id
+            BaseElement nextE = getItemWithMinDifference(super.getNextElement()); // нашли след элемент с минимальной разницей id
 
             if (type == ProcessType.CART_TT2 && this.getPreviousProcess() != null) // если это тележка типа тт2
-                super.setTnext((getPreviousProcess().getNum() + 1) * 2 + 10 + getTcurr()); // устанавливаем время согласно формулы ( (номер устройства +1) * 2 + tcurr)
+                super.settNext((getPreviousProcess().getNum() + 1) * 2 + 10 + gettCurr()); // устанавливаем время согласно формулы ( (номер устройства +1) * 2 + tcurr)
             else if (type == ProcessType.CART_TT1){
-                if (nextE instanceof Process)
-                    if (((Process) nextE).getType().equals(ProcessType.CART_TT2))
-                        ((Process) nextE).setPreviousProcess(this);
-                ((Process) nextE).queue++;
-                super.setTnext(getPreviousProcess().getNum() + 1 + 10 + getTcurr()); // устанавливаем время согласно формулы ( (номер устройства +1)+10 + tcurr)
+                if (nextE instanceof Processor)
+                    if (((Processor) nextE).getType().equals(ProcessType.CART_TT2))
+                        ((Processor) nextE).setPreviousProcess(this);
+                ((Processor) nextE).queue++;
+                super.settNext(getPreviousProcess().getNum() + 1 + 10 + gettCurr()); // устанавливаем время согласно формулы ( (номер устройства +1)+10 + tcurr)
                 nextE.setState(0);
             } else
-                super.setTnext(super.getTcurr() + super.getDelay());        // в другом случае считаем  обычно
+                super.settNext(super.gettCurr() + super.getDelay());        // в другом случае считаем  обычно
         } else {                                                        // если устройство занято
             setQueue(getQueue() + 1);
-            System.out.println("Q=" + getQueue()); // выводим размер очереди
+//            System.out.println("Q=" + getQueue()); // выводим размер очереди
         }
     }
 
-    Element getItemWithMinDifference(List<Element> nextElement) {    // выбераем след элемент для тех у кого разница между id минимальная по модулю
+    BaseElement getItemWithMinDifference(List<BaseElement> nextElement) {    // выбераем след элемент для тех у кого разница между id минимальная по модулю
         int min = Integer.MAX_VALUE;
-        Element result = null;
-        for (Element e : nextElement) {
+        BaseElement result = null;
+        for (BaseElement e : nextElement) {
             if (e.getState() == 0 && Math.abs(e.getNum() - this.getNum()) < min) {
                 result = e;
                 min = Math.abs(e.getNum() - this.getNum());
@@ -65,7 +65,7 @@ public class Process extends Element {
         }
         min = Integer.MAX_VALUE;
         if(result == null) {
-            for (Element e : nextElement) {
+            for (BaseElement e : nextElement) {
                 if ( Math.abs(e.getNum() - this.getNum()) < min) {
                     result = e;
                     min = Math.abs(e.getNum() - this.getNum());
@@ -79,23 +79,23 @@ public class Process extends Element {
     public void outAct() {
 
         super.outAct();
-        super.setTnext(Double.MAX_VALUE);
+        super.settNext(Double.MAX_VALUE);
         super.setState(0);                      //освободили устройство
         if (getQueue() > 0) {                   // если очередь не пустая
             setQueue(getQueue() - 1);           // взяли с очереди
             super.setState(1);                  // заняли устройство
-            super.setTnext(super.getTcurr() + super.getDelay());    // установили время завершения
+            super.settNext(super.gettCurr() + super.getDelay());    // установили время завершения
         }
 
-        Element nextE = getItemWithMinDifference(super.getNextElement()); // нашли след элемент с минимальной разницей id
+        BaseElement nextE = getItemWithMinDifference(super.getNextElement()); // нашли след элемент с минимальной разницей id
 
         if (nextE != null) {                                            //если такой существует
             if (getType().equals(ProcessType.CART_TT1)) {               // и сейчас мы на тележке типа ТТ1
-                super.setTnext(nextE.getNum() + 1 + 10 + getTcurr());   // считаем по специальной формуле время
+                super.settNext(nextE.getNum() + 1 + 10 + gettCurr());   // считаем по специальной формуле время
             }
-            if (nextE instanceof Process)
-                if (((Process) nextE).getType().equals(ProcessType.CART_TT2))
-                    ((Process) nextE).setPreviousProcess(this);
+            if (nextE instanceof Processor)
+                if (((Processor) nextE).getType().equals(ProcessType.CART_TT2))
+                    ((Processor) nextE).setPreviousProcess(this);
 //            ((Process) nextE).queue++;
 //            nextE.setState(0);
             if (nextE != null) {   // если существует свободный след лемент
@@ -113,11 +113,11 @@ public class Process extends Element {
         this.type = type;
     }
 
-    public Element getPreviousProcess() {
+    public BaseElement getPreviousProcess() {
         return previousProcess;
     }
 
-    public void setPreviousProcess(Element previousProcess) {
+    public void setPreviousProcess(BaseElement previousProcess) {
         this.previousProcess = previousProcess;
     }
 
@@ -137,12 +137,12 @@ public class Process extends Element {
         this.queue++;
     }
 
-    public int getMaxqueue() {
-        return maxqueue;
+    public int getMaxQueue() {
+        return maxQueue;
     }
 
-    public void setMaxqueue(int maxqueue) {
-        this.maxqueue = maxqueue;
+    public void setMaxQueue(int maxQueue) {
+        this.maxQueue = maxQueue;
     }
 
     public double getLoadSum() {
@@ -169,4 +169,6 @@ public class Process extends Element {
     public double getMeanQueue() {
         return meanQueue;
     }
+
+
 }

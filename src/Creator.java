@@ -1,14 +1,14 @@
 import java.util.List;
 
-public class Create extends Element {
-    public Create(double delay) {
+public class Creator extends BaseElement {
+    public Creator(double delay) {
         super(delay, "CREATOR");
     }
 
-    Element getItemWithMinNum(List<Element> nextElement) {
+    BaseElement getItemWithMinNum(List<BaseElement> nextElement) {
         int min = Integer.MAX_VALUE;
-        Element result = null;
-        for (Element e : nextElement) {
+        BaseElement result = null;
+        for (BaseElement e : nextElement) {
             if (e.getState() == 0 && e.getNum() < min) {
                 result = e;
                 min = e.getNum();
@@ -18,11 +18,11 @@ public class Create extends Element {
         min = Integer.MAX_VALUE;
 
         if (result == null){
-            for (Element e : nextElement) {
-                if( e instanceof Process)
-                if ( ((Process)e).getQueue() < min) {
+            for (BaseElement e : nextElement) {
+                if( e instanceof Processor)
+                if ( ((Processor)e).getQueue() < min) {
                     result = e;
-                    min = ((Process)e).getQueue();
+                    min = ((Processor)e).getQueue();
                 }
                 if(min == 0)
                     break ;
@@ -34,9 +34,9 @@ public class Create extends Element {
     @Override
     public void outAct() {
         super.outAct();                                             // закончить обработку
-        super.setTnext(super.getTcurr() + super.getDelay());
+        super.settNext(super.gettCurr() + super.getDelay());
 
-        Element nextE = getItemWithMinNum(super.getNextElement());
+        BaseElement nextE = getItemWithMinNum(super.getNextElement());
 
         if (nextE != null) {   // если существует свободный след лемент
             nextE.inAct();                // запускаем в работу
